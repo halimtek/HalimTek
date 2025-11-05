@@ -1,52 +1,23 @@
 import 'package:flutter/material.dart';
+import 'screens/home_screen.dart';
 
-void main() => runApp(MaterialApp(
-  home: Home(),
-));
+void main() {
+  runApp(const HalimTekApp());
+}
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class HalimTekApp extends StatelessWidget {
+  const HalimTekApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-    appBar: AppBar(
-      title: Text('Halim Tek'),
-      centerTitle: true,
-      backgroundColor: Colors.red[600],
-    ),
-    body: Center(
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        IconButton(
-          onPressed: () {
-            print('Icon clicked');
-          },
-          icon: Icon(
-            Icons.mail,
-            color: Colors.amber,
-            size: 80,
-          ),
-          tooltip: 'Click me',
-        ),
-        SizedBox(height: 8),
-        Text(
-          'Mail',
-          style: TextStyle(fontSize: 18),
-        ),
-      ],
-    ),
-  ),
-
-    floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        print('wow');
-      },
-      backgroundColor: Colors.red[600],
-      child: Text('wow'),
-       tooltip: 'Floating Action Button',
-    ),
-  );
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'HalimTek',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
+      ),
+      home: const HomeScreen(),
+    );
   }
 }
