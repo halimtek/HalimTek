@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import '../widgets/service_card.dart';
+import 'book_service_screen.dart';
+import 'booking_list_screen.dart';
+import '../services/auth_service.dart';
+import 'admin_page.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final String currentUserEmail;
+  final bool isAdmin;
+
+  const HomeScreen({super.key, required this.currentUserEmail, required this.isAdmin});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +28,24 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
+        actions: [
+          if (isAdmin)
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AdminPage()));
+                },
+                icon: const Icon(Icons.admin_panel_settings)),
+          IconButton(
+            onPressed: () async {
+              await AuthService.logout();
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+            icon: const Icon(Icons.logout),
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -37,13 +62,32 @@ class HomeScreen extends StatelessWidget {
               title: service['title'] as String,
               icon: service['icon'] as IconData,
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('${service['title']} clicked')),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookServiceScreen(
+                        serviceName: service['title'] as String,
+                        userEmail: currentUserEmail),
+                  ),
                 );
               },
             );
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    BookingListScreen(userEmail: currentUserEmail)),
+          );
+        },
+        label: const Text('My Bookings'),
+        icon: const Icon(Icons.list_alt),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
       ),
     );
   }
